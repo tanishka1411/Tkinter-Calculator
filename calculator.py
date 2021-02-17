@@ -1,12 +1,59 @@
 from tkinter import *
 import parser
+from math import factorial
+
+i=0
+def get_variables(num):
+    global i
+    display.insert(i,num)
+    i+=1
+
+def get_operation(operator):
+    global i
+    length = len(operator)
+    display.insert(i,operator)
+    i+=length
+
+def clear_all():
+    display.delete(0,END)
+
+def undo():
+    entire_string = display.get()
+    if len(entire_string):
+        new_string = entire_string[:-1]
+        clear_all()
+        display.insert(0,new_string)
+    else:
+        clear_all()
+        display.insert(0,"Error")
+
+def calculate():
+    entire_string = display.get()
+    try:
+        a = parser.expr(entire_string).compile()
+        result = eval(a)
+        clear_all()
+        display.insert(0,result)
+    except Exception:
+        clear_all()
+        display.insert(0,"Error")
+
+def fact():
+    entire_string = display.get()
+    try:
+        result = factorial(int(entire_string))
+        clear_all()
+        display.insert(0,result)
+    except Exception:
+        clear_all()
+        display.insert(0,"Error")
 
 root = Tk()
 root.title('Calculator')
 root.iconbitmap('icon.ico')
 root.geometry("300x300")
 
-#configuring rows and columns so that it shrink and grow with your window
+#configuring rows and columns
 root.columnconfigure(0, weight=2)
 root.columnconfigure(1, weight=2)
 root.columnconfigure(2, weight=2)
